@@ -179,6 +179,7 @@ def load_model(
     """Load a model from Hugging Face."""
     # get model adapter
     adapter = get_model_adapter(model_path)
+    print(adapter)
 
     # Handle device mapping
     cpu_offloading = raise_warning_for_incompatible_cpu_offloading_configuration(
@@ -1747,7 +1748,12 @@ class ZephyrBetaAdapter(BaseModelAdapter):
     """The model adapter for Zephyr (e.g. HuggingFaceH4/zephyr-7b-beta)"""
 
     def match(self, model_path: str):
-        return "zephyr-7b-beta" in model_path.lower()
+        return (
+            "zephyr-7b-beta" in model_path.lower() or
+            "zephyr-beta" in model_path.lower() or
+            "mistral-7b-sft-beta" in model_path.lower() or
+            "mistral-sft" in model_path.lower()
+        )
 
     def get_default_conv_template(self, model_path: str) -> Conversation:
         return get_conv_template("zephyr-beta")
